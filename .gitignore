@@ -1,0 +1,19 @@
+# Model weights
+*.pt
+*.pth
+
+# Raw input videos
+data/
+
+# Pipeline output (generated clips + logs)
+output/
+
+# Training dataset images
+training/dataset/
+
+# Python
+__pycache__/
+*.pyc
+
+# macOS
+.DS_Store

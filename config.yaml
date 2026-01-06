@@ -1,0 +1,66 @@
+# Waymo Detection Pipeline Configuration
+# All thresholds and parameters are tunable here.
+
+# --- Paths ---
+input_videos:
+  - "data/*.mp4"
+output_dir: "output"
+model_weights: "yolo26s.pt"
+classifier_weights: "models/waymo_classifier.pth"
+
+# --- Detection mode ---
+# "two_stage": pretrained YOLO car detection + ResNet18 waymo classifier
+# "finetuned": single YOLO model fine-tuned with waymo class
+detection_mode: "two_stage"
+
+# --- YOLO detection ---
+vehicle_classes: [2, 5, 7]       # COCO classes: car=2, bus=5, truck=7
+pedestrian_classes: [0]          # COCO class: person=0
+detection_confidence: 0.35       # moderate — classifier does the real filtering
+
+# --- Spatial filtering (fixes streetlight false positives) ---
+min_y_fraction: 0.15             # ignore detections in top 15% of frame (streetlights)
+min_bbox_area: 500               # minimum bbox area in pixels (filters tiny noise)
+max_aspect_ratio: 4.0            # max height/width ratio (filters poles/posts)
+max_bbox_area_fraction: 0.08     # max bbox as fraction of frame area (filters glare/phantom boxes)
+
+# --- Cross-class NMS (fixes double boxes on same vehicle) ---
+cross_class_iou_threshold: 0.5   # merge overlapping boxes across classes
+
+# --- Track deduplication (fixes two track IDs on same object) ---
+track_dedup_iou_threshold: 0.3   # IoU threshold to consider two tracks as duplicates
+
+# --- Waymo classifier (two_stage mode) ---
+classifier_confidence: 0.75      # HIGH threshold — precision over recall
+crop_roof_extension: 0.2         # extend crop upward by 20% of bbox height for LIDAR dome
+
+# --- ByteTrack tracking ---
+track_buffer: 60                 # frames to keep lost tracks alive (~2.4 sec at 25fps)
+
+# --- Event detection (CRITICAL for clip quality) ---
+min_track_frames: 8              # ignore tracks shorter than this (noise)
+gap_tolerance_frames: 50         # bridge gaps up to ~2 sec within a single pass
+max_clip_duration_sec: 60        # hard cap — prevents runaway 7-8 min clips
+padding_before_sec: 3.0          # seconds of video before Waymo enters
+padding_after_sec: 3.0           # seconds of video after Waymo exits
+waymo_frame_ratio: 0.4           # at least 40% of track must be classified as Waymo
+dedup_overlap_threshold_sec: 5.0 # merge events closer than this many seconds apart
+
+# --- Output encoding ---
+output_fps: 30
+output_width: 1920
+output_height: 1080
+output_codec: "libx264"
+output_crf: 23
+
+# --- Day/Night classification ---
+day_night_luminance_threshold: 80.0   # mean grayscale below this = night (0-255 scale)
+
+# --- Track interpolation (fixes spotty tracking) ---
+interpolate_gaps: true
+max_interpolation_gap: 30        # only interpolate gaps <= 30 frames (~1.2 sec)
+
+# --- Processing ---
+device: "auto"                    # "auto" picks best available (CUDA > MPS > CPU), or set "mps"/"cuda"/"cpu"
+process_every_n_frames: 1        # set to 2 to halve processing time (at cost of temporal resolution)
+# max_frames: 2000               # uncomment to limit frames processed (for testing)
