@@ -396,7 +396,7 @@ def detect_and_track(
     classifier=None,
 ) -> dict[int, TrackData]:
     """
-    Run YOLOv8 detection + ByteTrack on a video.
+    Run YOLO26 detection + ByteTrack on a video.
 
     Detects vehicles (car/bus/truck) and pedestrians (person).
     Labels each detection as AV, HDV, or PED.

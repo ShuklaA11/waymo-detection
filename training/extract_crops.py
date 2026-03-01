@@ -1,7 +1,7 @@
 """
 Extract cropped vehicle images from video for classifier training.
 
-Runs pretrained YOLOv8 on a video and saves every Nth detected vehicle crop
+Runs pretrained YOLO26 on a video and saves every Nth detected vehicle crop
 to the unsorted directory. User then manually sorts into waymo/ and not_waymo/.
 
 Usage:
@@ -42,7 +42,7 @@ def main():
     parser = argparse.ArgumentParser(description="Extract vehicle crops for classifier training")
     parser.add_argument("--video", required=True, help="Path to input video")
     parser.add_argument("--output", default="training/dataset/unsorted", help="Output directory for crops")
-    parser.add_argument("--model", default="yolov8s.pt", help="YOLOv8 model weights")
+    parser.add_argument("--model", default="yolo26s.pt", help="YOLO26 model weights")
     parser.add_argument("--every", type=int, default=25, help="Save every Nth detection (default: 25)")
     parser.add_argument("--max-frames", type=int, default=None, help="Max frames to process")
     parser.add_argument("--min-crop-size", type=int, default=30, help="Min crop dimension in pixels")

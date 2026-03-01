@@ -10,7 +10,7 @@ The pipeline processes footage from an elevated intersection camera, identifies 
 
 The pipeline uses two stages of classification to achieve high precision:
 
-1. **Vehicle Detection + Tracking** -- YOLOv8s detects all vehicles (cars, buses, trucks) and pedestrians. ByteTrack assigns persistent track IDs across frames so each vehicle is followed through the scene.
+1. **Vehicle Detection + Tracking** -- YOLO26s detects all vehicles (cars, buses, trucks) and pedestrians. ByteTrack assigns persistent track IDs across frames so each vehicle is followed through the scene.
 
 2. **Waymo Classification** -- A ResNet18 binary classifier examines each vehicle crop, looking for the distinctive rooftop LIDAR dome that distinguishes Waymo vehicles from regular cars. Crops are extended upward to capture the dome.
 
@@ -29,7 +29,7 @@ The pipeline uses two stages of classification to achieve high precision:
 
 | Component | Technology |
 |---|---|
-| Object detection | [YOLOv8](https://github.com/ultralytics/ultralytics) (via Ultralytics) |
+| Object detection | [YOLO26](https://github.com/ultralytics/ultralytics) (via Ultralytics) |
 | Object tracking | [ByteTrack](https://github.com/ifzhang/ByteTrack) (built into Ultralytics) |
 | Waymo classifier | ResNet18 (PyTorch / torchvision) |
 | Video I/O | OpenCV |
@@ -47,7 +47,7 @@ waymo_detection/
 │   ├── run.py                 ← CLI entry point
 │   ├── pipeline.py            ← orchestrator
 │   ├── config.py              ← Pydantic config + YAML loading
-│   ├── detect_and_track.py    ← YOLOv8 + ByteTrack detection
+│   ├── detect_and_track.py    ← YOLO26 + ByteTrack detection
 │   ├── waymo_classifier.py    ← ResNet18 binary classifier
 │   ├── event_detector.py      ← track-to-event conversion
 │   ├── clip_extractor.py      ← ffmpeg clip cutting
@@ -117,7 +117,7 @@ pip install torch torchvision
 
 The pipeline requires two model files in the project root and `models/` directory:
 
-- A YOLO model (e.g., `yolov8s.pt`) -- auto-downloaded by Ultralytics on first run
+- A YOLO model (e.g., `yolo26s.pt`) -- auto-downloaded by Ultralytics on first run
 - `models/waymo_classifier.pth` -- trained ResNet18 classifier (see [Training the Classifier](#training-the-classifier))
 
 ## Usage

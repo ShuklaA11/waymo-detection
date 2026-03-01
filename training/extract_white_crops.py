@@ -151,7 +151,7 @@ def main():
     parser.add_argument("--video", help="Path to a single input video")
     parser.add_argument("--all-videos", action="store_true", help="Process all videos in data/")
     parser.add_argument("--output", default="training/dataset/strict_white_new", help="Output directory")
-    parser.add_argument("--model", default="yolov8s.pt", help="YOLOv8 model weights")
+    parser.add_argument("--model", default="yolo26s.pt", help="YOLO26 model weights")
     parser.add_argument("--every", type=int, default=5, help="Save every Nth detection")
     parser.add_argument("--process-every-n", type=int, default=5, help="Only run YOLO on every Nth frame (speed vs coverage)")
     parser.add_argument("--max-frames", type=int, default=None, help="Max frames per video")
