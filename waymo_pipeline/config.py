@@ -69,6 +69,8 @@ class PipelineConfig(BaseModel):
     padding_after_sec: float = 3.0
     waymo_frame_ratio: float = 0.4  # fraction of track frames classified as waymo
     dedup_overlap_threshold_sec: float = 5.0  # merge events closer than this (seconds)
+    min_expected_clip_sec: float = 12.0  # clips shorter than this are flagged as faulty
+    max_expected_clip_sec: float = 45.0  # clips longer than this are flagged as faulty
 
     # --- Output encoding ---
     output_fps: int = 30

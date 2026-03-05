@@ -122,6 +122,7 @@ def run_pipeline(config: PipelineConfig, base_dir: str = "."):
     classifier = _load_classifier(config, base_dir=base_dir)
 
     all_logged_events = []
+    faulty_clips = []
     total_clips = 0
 
     for vid_idx, video_path in enumerate(video_paths, 1):
@@ -190,6 +191,16 @@ def run_pipeline(config: PipelineConfig, base_dir: str = "."):
             if success:
                 total_clips += 1
                 all_logged_events.append((event, time_of_day, clip_name))
+
+                # Flag clips with unexpected duration
+                if duration < config.min_expected_clip_sec:
+                    reason = f"too short ({duration:.1f}s < {config.min_expected_clip_sec}s)"
+                    faulty_clips.append((clip_name, time_of_day, duration, reason))
+                    print(f"    WARNING: {reason}")
+                elif duration > config.max_expected_clip_sec:
+                    reason = f"too long ({duration:.1f}s > {config.max_expected_clip_sec}s)"
+                    faulty_clips.append((clip_name, time_of_day, duration, reason))
+                    print(f"    WARNING: {reason}")
             else:
                 print(f"    FAILED to extract clip {i}")
 
@@ -198,5 +209,16 @@ def run_pipeline(config: PipelineConfig, base_dir: str = "."):
         log_path = str(Path(config.output_dir) / "detection_log.csv")
         _log_events(all_logged_events, log_path)
         print(f"\nDetection log written to: {log_path}")
+
+    # Write faulty clips log
+    if faulty_clips:
+        faulty_path = str(Path(config.output_dir) / "faulty_clips.csv")
+        Path(faulty_path).parent.mkdir(parents=True, exist_ok=True)
+        with open(faulty_path, "w", newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow(["clip_file", "time_of_day", "duration_sec", "reason"])
+            for clip_name, tod, dur, reason in faulty_clips:
+                writer.writerow([clip_name, tod, f"{dur:.1f}", reason])
+        print(f"\nWARNING: {len(faulty_clips)} faulty clip(s) flagged — see {faulty_path}")
 
     print(f"\nPipeline complete: {total_clips} clip(s) exported")
