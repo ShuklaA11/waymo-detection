@@ -110,9 +110,17 @@ class PipelineConfig(BaseModel):
         if v == "mps" and not (hasattr(torch.backends, "mps") and torch.backends.mps.is_available()):
             print("WARNING: MPS not available, falling back to CPU")
             return "cpu"
-        if v == "cuda" and not torch.cuda.is_available():
-            print("WARNING: CUDA not available, falling back to CPU")
-            return "cpu"
+        # Support cuda:0, cuda:1, etc.
+        if v.startswith("cuda"):
+            if not torch.cuda.is_available():
+                print("WARNING: CUDA not available, falling back to CPU")
+                return "cpu"
+            if ":" in v:
+                idx = int(v.split(":")[1])
+                if idx >= torch.cuda.device_count():
+                    print(f"WARNING: CUDA device {idx} not available (have {torch.cuda.device_count()}), using cuda:0")
+                    return "cuda:0"
+            return v
         return v
 
 
