@@ -1,0 +1,37 @@
+input_videos:
+  - "D:/Video_recording/Connected_intersection/EDK_st and SJB/02102026/*.mp4"
+output_dir: "output/sjb"
+model_weights: "yolo26s.pt"
+classifier_weights: "models/waymo_classifier.pth"
+detection_mode: "two_stage"
+vehicle_classes: [2, 5, 7]
+pedestrian_classes: [0]
+detection_confidence: 0.35
+min_y_fraction: 0.15
+min_bbox_area: 500
+max_aspect_ratio: 4.0
+max_bbox_area_fraction: 0.08
+cross_class_iou_threshold: 0.5
+track_dedup_iou_threshold: 0.3
+classifier_confidence: 0.75
+crop_roof_extension: 0.2
+track_buffer: 60
+min_track_frames: 8
+gap_tolerance_frames: 50
+max_clip_duration_sec: 60
+padding_before_sec: 3.0
+padding_after_sec: 3.0
+waymo_frame_ratio: 0.4
+dedup_overlap_threshold_sec: 5.0
+min_expected_clip_sec: 12.0
+max_expected_clip_sec: 45.0
+output_fps: 30
+output_width: 1920
+output_height: 1080
+output_codec: "libx264"
+output_crf: 23
+day_night_luminance_threshold: 80.0
+interpolate_gaps: true
+max_interpolation_gap: 30
+device: "cuda:0"
+process_every_n_frames: 1

@@ -3,7 +3,8 @@
 
 # --- Paths ---
 input_videos:
-  - "data/*.mp4"
+  - "D:/Video_recording/Connected_intersection/EDK_st and SJB/**/*.mp4"
+  - "D:/Video_recording/Connected_intersection/EDK_st and Speedway/**/*.mp4"
 output_dir: "output"
 model_weights: "yolo26s.pt"
 classifier_weights: "models/waymo_classifier.pth"

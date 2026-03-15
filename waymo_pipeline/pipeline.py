@@ -6,6 +6,9 @@ import csv
 import glob
 from pathlib import Path
 
+import torch
+from ultralytics import YOLO
+
 from .clip_extractor import extract_clip
 from .config import PipelineConfig
 from .day_night import classify_video_day_night
@@ -118,8 +121,9 @@ def run_pipeline(config: PipelineConfig, base_dir: str = "."):
 
     print(f"Found {len(video_paths)} video(s) to process")
 
-    # Load classifier
+    # Load models once — reuse across all videos to avoid GPU memory leaks
     classifier = _load_classifier(config, base_dir=base_dir)
+    yolo_model = YOLO(config.model_weights)
 
     all_logged_events = []
     faulty_clips = []
@@ -143,7 +147,13 @@ def run_pipeline(config: PipelineConfig, base_dir: str = "."):
 
         # Stage 1: Detection + Tracking (now with AV/HDV/PED labels)
         print("  Stage 1: Detecting and tracking vehicles + pedestrians...")
-        tracks = detect_and_track(video_path, config, classifier=classifier)
+        tracks = detect_and_track(video_path, config, classifier=classifier, model=yolo_model)
+
+        # Free fragmented GPU memory between videos
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+        elif hasattr(torch, "mps") and hasattr(torch.mps, "empty_cache"):
+            torch.mps.empty_cache()
 
         # Stage 2: Interpolate track gaps (smoother bounding boxes)
         if config.interpolate_gaps:
