@@ -17,3 +17,16 @@ __pycache__/
 
 # macOS
 .DS_Store
+
+# Private docs / planning scratchpads
+CLAUDE.md
+plan.md
+plan-*.md
+PLAN.md
+planning.md
+plans/
+
+# Runtime logs
+*.log
+sjb_log.txt
+speedway_log.txt
