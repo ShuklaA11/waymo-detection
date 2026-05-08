@@ -394,6 +394,7 @@ def detect_and_track(
     video_path: str,
     config: PipelineConfig,
     classifier=None,
+    model=None,
 ) -> dict[int, TrackData]:
     """
     Run YOLO26 detection + ByteTrack on a video.
@@ -401,9 +402,18 @@ def detect_and_track(
     Detects vehicles (car/bus/truck) and pedestrians (person).
     Labels each detection as AV, HDV, or PED.
 
+    Args:
+        model: Pre-loaded YOLO model. If None, creates a new one.
+               Passing a shared model avoids GPU memory leaks across videos.
+
     Returns dict mapping track_id -> TrackData with all detections.
     """
-    model = YOLO(config.model_weights)
+    if model is None:
+        model = YOLO(config.model_weights)
+
+    # Reset tracker state from any previous video
+    if hasattr(model, "predictor") and model.predictor is not None:
+        model.predictor.trackers = []
 
     # Combine vehicle + pedestrian classes for detection
     all_classes = config.vehicle_classes + config.pedestrian_classes
@@ -411,7 +421,6 @@ def detect_and_track(
 
     tracker_kwargs = {
         "tracker": "bytetrack.yaml",
-        "persist": True,
     }
 
     results_gen = model.track(

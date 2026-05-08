@@ -39,8 +39,7 @@ def main():
     )
     parser.add_argument(
         "--device",
-        choices=["mps", "cuda", "cpu"],
-        help="Override compute device",
+        help="Override compute device (mps, cuda, cuda:0, cuda:1, cpu)",
     )
     parser.add_argument(
         "--output-dir",
