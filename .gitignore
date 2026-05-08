@@ -10,6 +10,7 @@ output/
 
 # Training dataset images
 training/dataset/
+training/dataset_yolo/
 
 # Python
 __pycache__/
