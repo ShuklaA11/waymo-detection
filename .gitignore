@@ -11,6 +11,7 @@ output/
 # Training dataset images
 training/dataset/
 training/dataset_yolo/
+runs/
 
 # Python
 __pycache__/
