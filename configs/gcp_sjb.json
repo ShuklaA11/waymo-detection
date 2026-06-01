@@ -1,0 +1,12 @@
+{
+  "camera": "sjb",
+  "note": "Dean Keeton St / San Jacinto Blvd, Austin TX. Pixel coords are full-res (1920x1080) camera-frame points at the intersection crosswalk-box corners. lat/lng derived from ESRI World Imagery satellite (bbox -97.735482,30.288566,-97.733742,30.290066). APPROXIMATE cross-view matching; refine with pick_gcp.py for survey accuracy.",
+  "frame_size": [1920, 1080],
+  "intersection_center": {"lat": 30.289316, "lng": -97.734612},
+  "points": [
+    {"id": 0, "name": "NW corner", "px": [720, 395], "lat": 30.289400, "lng": -97.734743},
+    {"id": 1, "name": "NE corner", "px": [1195, 370], "lat": 30.289400, "lng": -97.734505},
+    {"id": 2, "name": "SE corner", "px": [1080, 660], "lat": 30.289246, "lng": -97.734496},
+    {"id": 3, "name": "SW corner", "px": [630, 620], "lat": 30.289246, "lng": -97.734734}
+  ]
+}
