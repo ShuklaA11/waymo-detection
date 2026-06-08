@@ -1,12 +1,13 @@
 {
   "camera": "sjb",
-  "note": "Dean Keeton St / San Jacinto Blvd, Austin TX. Pixel coords are full-res (1920x1080) camera-frame points at the intersection crosswalk-box corners. lat/lng derived from ESRI World Imagery satellite (bbox -97.735482,30.288566,-97.733742,30.290066). APPROXIMATE cross-view matching; refine with pick_gcp.py for survey accuracy.",
+  "note": "Dean Keeton St / San Jacinto Blvd, Austin TX. Pixels picked on the midday frame (pick_gcp.py, point 3 dropped); lat/lng read from Google Maps satellite by the user. intersection_center null -> homography averages the points.",
   "frame_size": [1920, 1080],
-  "intersection_center": {"lat": 30.289316, "lng": -97.734612},
+  "intersection_center": null,
   "points": [
-    {"id": 0, "name": "NW corner", "px": [720, 395], "lat": 30.289400, "lng": -97.734743},
-    {"id": 1, "name": "NE corner", "px": [1195, 370], "lat": 30.289400, "lng": -97.734505},
-    {"id": 2, "name": "SE corner", "px": [1080, 660], "lat": 30.289246, "lng": -97.734496},
-    {"id": 3, "name": "SW corner", "px": [630, 620], "lat": 30.289246, "lng": -97.734734}
+    {"id": 0, "name": "W crosswalk", "px": [606.6, 539.6], "lat": 30.289427, "lng": -97.734738},
+    {"id": 1, "name": "E side", "px": [1523.4, 493.8], "lat": 30.289228, "lng": -97.734521},
+    {"id": 2, "name": "N crosswalk", "px": [1003.7, 361.5], "lat": 30.289411, "lng": -97.734510},
+    {"id": 4, "name": "DeanKeeton W near", "px": [11.8, 887.7], "lat": 30.289448, "lng": -97.735334},
+    {"id": 5, "name": "SanJacinto S approach", "px": [395.8, 1056.0], "lat": 30.289297, "lng": -97.735441}
   ]
 }
